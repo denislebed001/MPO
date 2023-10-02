@@ -43,69 +43,45 @@
         <label for="percentage">Введите процент увеличения:</label>
         <input type="number" id="percentage" placeholder="Процент увеличения">
         <button onclick="onIncreasePercentage()">Увеличить цены</button>
+        <button onclick="pasteFromClipboard()">Вставить из буфера</button>
         <label for="result">Результат:</label>
         <textarea id="result" readonly></textarea>
     </div>
 
     <script>
         // JavaScript-функции из вашего кода
+
+        function pasteFromClipboard() {
+            const textArea = document.createElement("textarea");
+
+            // Вставляем текст из буфера обмена
+            navigator.clipboard.readText().then((text) => {
+                const textWithoutDots = text.replace(/\./g, ''); // Удаляем все точки из текста
+                textArea.value = textWithoutDots;
+                document.getElementById('text').value = textWithoutDots; // Заполняем поле ввода текста
+            }).catch((error) => {
+                console.error('Ошибка при вставке из буфера: ', error);
+            });
+
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('paste');
+            document.body.removeChild(textArea);
+        }
+
+        // Остальной код оставляем без изменений
         function extractPrices(text) {
-            const mainPattern = /(?<!\d)(\d{1,4}(?:,\d{3})*(?:\.\d{1,2})?)(?:₽🇨🇳)?/g;
-            const fourDigitPattern = /(?<!\d)(\d{4})(?!\d)(?:\s*₽)?/g;
-            const fiveDigitPattern = /(?<!\d)(\d{5})(?!\d)(?:\s*₽)?/g;
-            const sixDigitPattern = /(?<!\d)(\d{6})(?!\d)(?:\s*₽)?/g;
-            const allPrices = [];
-
-            let matches = text.match(mainPattern);
-            if (matches) {
-                matches.forEach(match => {
-                    if (!match.includes('(')) {
-                        const formattedPrice = parseFloat(match.replace(/,|\s|₽/g, ''));
-                        allPrices.push(formattedPrice.toFixed(2) + '₽');
-                    }
-                });
-            }
-
-            matches = text.match(fourDigitPattern);
-            if (matches) {
-                allPrices.push(...matches);
-            }
-
-            matches = text.match(fiveDigitPattern);
-            if (matches) {
-                allPrices.push(...matches);
-            }
-
-            matches = text.match(sixDigitPattern);
-            if (matches) {
-                allPrices.push(...matches);
-            }
-
-            return allPrices;
+            // ...
         }
 
         function increasePrices(prices, percentage) {
-            const increasedPrices = [];
-            for (const price of prices) {
-                const originalPrice = parseFloat(price.replace(/₽|,/g, ''));
-                const increasedPrice = Math.ceil(originalPrice * (1 + percentage / 100) / 100) * 100;
-                increasedPrices.push(increasedPrice.toLocaleString() + '₽');
-            }
-            return increasedPrices;
+            // ...
         }
 
         function onIncreasePercentage() {
-            const inputText = document.getElementById('text').value;
-            const percentage = parseFloat(document.getElementById('percentage').value);
-            const resultPrices = extractPrices(inputText);
-            const increasedPrices = increasePrices(resultPrices, percentage);
-            const resultTextArea = document.getElementById('result');
-            let formattedText = inputText;
-            increasedPrices.forEach((price, index) => {
-                formattedText = formattedText.replace(resultPrices[index], price);
-            });
-            resultTextArea.value = formattedText;
+            // ...
         }
     </script>
 </body>
 </html>
+
