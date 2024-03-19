@@ -37,7 +37,10 @@
             const inputText = document.getElementById('inputText').value;
             const formattedText = inputText
                 .split('\n')
-                .map(line => line.split('от')[0].trim())
+                .map(line => {
+                    const parts = line.split('->');
+                    return parts[0].trim() + ' ' + parts[1].trim();
+                })
                 .join('\n');
             document.getElementById('outputText').value = formattedText;
         }
