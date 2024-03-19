@@ -2,11 +2,45 @@ from flask import Flask, request, render_template_string
 
 app = Flask(__name__)
 
+# HTML шаблон с использованием Jinja2
+TEMPLATE = '''
+<!doctype html>
+<html lang="ru">
+<head>
+  <title>Text Formatter</title>
+  <script>
+    // Функция для вставки текста из буфера обмена
+    function pasteFromClipboard() {
+      navigator.clipboard.readText().then(
+        clipText => document.getElementById('text').value = clipText);
+    }
+    // Функция для копирования текста в буфер обмена
+    function copyToClipboard() {
+      navigator.clipboard.writeText(document.getElementById('formatted_text').innerText);
+    }
+  </script>
+</head>
+<body>
+  <h1>Форматирование текста</h1>
+  <form method="post">
+    <textarea id="text" name="text" style="width:400px;height:150px;"></textarea><br>
+    <button type="button" onclick="pasteFromClipboard()">Вставить из буфера</button>
+    <button type="submit">Изменить</button>
+  </form>
+  {% if formatted_text %}
+    <h2>Отформатированный текст:</h2>
+    <pre id="formatted_text">{{ formatted_text }}</pre>
+    <button type="button" onclick="copyToClipboard()">Скопировать в буфер</button>
+  {% endif %}
+</body>
+</html>
+'''
+
 @app.route('/', methods=['GET', 'POST'])
 def format_text():
+    formatted_text = ''
     if request.method == 'POST':
         text = request.form['text']
-        formatted_text = ''
         # Разделяем текст на строки и обрабатываем каждую из них
         for line in text.split('\n'):
             if '->' in line:
@@ -15,22 +49,7 @@ def format_text():
                 item = parts[0].strip()
                 price = parts[1].strip().split(' ')[0]
                 formatted_text += f'{item} {price}\n'
-        return render_template_string(TEMPLATE, formatted_text=formatted_text)
-    return render_template_string(TEMPLATE)
+    return render_template_string(TEMPLATE, formatted_text=formatted_text)
 
-TEMPLATE = '''
-<!doctype html>
-<title>Text Formatter</title>
-<h1>Simple Text Formatter</h1>
-<form method=post>
-  <textarea name=text style="width:400px;height:150px;"></textarea><br>
-  <input type=submit value="Format">
-</form>
-{% if formatted_text %}
-<h2>Formatted Text:</h2>
-<pre>{{ formatted_text }}</pre>
-{% endif %}
-'''
-
-if name == '__main__':
+if __name__ == '__main__':
     app.run(debug=True)
