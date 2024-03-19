@@ -13,7 +13,7 @@
     </style>
 </head>
 <body>
-    <h1>Форматирование</h1>
+    <h1>Форматирование текста для iPhone</h1>
     <textarea id="inputText" placeholder="Вставьте текст здесь..."></textarea>
     <button onclick="copyToClipboard()">Копировать</button>
     <button onclick="pasteFromClipboard()">Вставить</button>
@@ -38,8 +38,8 @@
             const formattedText = inputText
                 .split('\n')
                 .map(line => {
-                    const parts = line.match(/(.*?)(от 1шт\. -> )(\d+ \d+)/);
-                    return parts ? parts[1].trim() + ' ' + parts[3].trim() : '';
+                    const parts = line.match(/(iPhone \d+ \d+ \w+ \s*🇦🇪|🇨🇳)\s*от 1шт\. -> (\d+ \d+)/);
+                    return parts ? parts[1] + ' ' + parts[2] : '';
                 })
                 .filter(line => line)
                 .join('\n');
