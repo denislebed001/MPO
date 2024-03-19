@@ -36,13 +36,10 @@
         function formatText() {
             const inputText = document.getElementById('inputText').value;
             const formattedText = inputText
-                .split('\n')
-                .map(line => {
-                    const parts = line.match(/(iPhone \d+ \d+ \w+ \s*🇦🇪|🇨🇳)\s*от 1шт\. -> (\d+ \d+)/);
-                    return parts ? parts[1] + ' ' + parts[2] : '';
-                })
-                .filter(line => line)
-                .join('\n');
+                .replace(/от \d+шт\. -> /g, '')
+                .replace(/ руб\./g, '')
+                .replace(/\n+/g, '\n')
+                .trim();
             document.getElementById('outputText').value = formattedText;
         }
     </script>
