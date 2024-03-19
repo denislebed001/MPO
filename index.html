@@ -13,7 +13,7 @@
     </style>
 </head>
 <body>
-    <h1>Форматирование текста </h1>
+    <h1>Форматирование</h1>
     <textarea id="inputText" placeholder="Вставьте текст здесь..."></textarea>
     <button onclick="copyToClipboard()">Копировать</button>
     <button onclick="pasteFromClipboard()">Вставить</button>
@@ -38,11 +38,8 @@
             const formattedText = inputText
                 .split('\n')
                 .map(line => {
-                    const parts = line.split('->');
-                    if (parts.length === 2) {
-                        return parts[0].trim() + ' ' + parts[1].trim().split(' ')[0];
-                    }
-                    return '';
+                    const parts = line.match(/(.*?)(от 1шт\. -> )(\d+ \d+)/);
+                    return parts ? parts[1].trim() + ' ' + parts[3].trim() : '';
                 })
                 .filter(line => line)
                 .join('\n');
