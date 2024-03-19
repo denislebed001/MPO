@@ -13,7 +13,7 @@
     </style>
 </head>
 <body>
-    <h1>OnePlaceText</h1>
+    <h1>MobilePriceOptTEXT</h1>
     <textarea id="inputText" placeholder="Вставьте текст здесь..."></textarea>
     <button onclick="copyToClipboard()">Копировать</button>
     <button onclick="pasteFromClipboard()">Вставить</button>
@@ -36,10 +36,10 @@
         function formatText() {
             const inputText = document.getElementById('inputText').value;
             const formattedText = inputText
-                .replace(/от \d+шт\. -> /g, '')
-                .replace(/ руб\./g, '')
-                .replace(/\n+/g, '\n')
-                .trim();
+                .split('\n')
+                .map(line => line.replace(/от \d+шт\. -> /g, '').replace(/ руб\./g, ''))
+                .filter(line => line.trim() !== '')
+                .join('\n');
             document.getElementById('outputText').value = formattedText;
         }
     </script>
