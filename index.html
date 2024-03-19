@@ -13,35 +13,47 @@
     </style>
 </head>
 <body>
-    <h1>One.Second</h1>
+    <h1>Форматирование текста для iPhone</h1>
     <textarea id="inputText" placeholder="Вставьте текст здесь..."></textarea>
     <button onclick="copyToClipboard()">Копировать</button>
     <button onclick="pasteFromClipboard()">Вставить</button>
     <button onclick="formatText()">Форматировать</button>
     <textarea id="outputText" placeholder="Отформатированный текст будет здесь..."></textarea>
 
- <script>
-    function formatText() {
-        const inputText = document.getElementById('inputText').value;
-        const lines = inputText
-            .replace(/от \d+шт\. -> /g, '')
-            .replace(/ руб\./g, '')
-            .trim()
-            .split('\n');
-        let formattedText = '';
-        for (let i = 0; i < lines.length; i++) {
-            // Добавляем цену к названию модели, если текущая строка не пуста и следующая строка содержит цену
-            if (lines[i] && !isNaN(lines[i + 1])) {
-                formattedText += lines[i] + ' ' + lines[i + 1] + '\n';
-                i++; // Пропускаем следующую строку, так как она уже добавлена
-            } else if (lines[i]) {
-                formattedText += lines[i] + '\n';
-            }
+    <script>
+        function copyToClipboard() {
+            const outputText = document.getElementById('outputText');
+            outputText.select();
+            document.execCommand('copy');
         }
-        document.getElementById('outputText').value = formattedText.trim();
-    }
-</script>
 
+        function pasteFromClipboard() {
+            navigator.clipboard.readText().then(text => {
+                document.getElementById('inputText').value = text;
+            }).catch(err => {
+                console.error('Не удалось вставить текст: ', err);
+            });
+        }
 
+        function formatText() {
+            const inputText = document.getElementById('inputText').value;
+            const lines = inputText
+                .replace(/от \d+шт\. -> /g, '')
+                .replace(/ руб\./g, '')
+                .trim()
+                .split('\n');
+            let formattedText = '';
+            for (let i = 0; i < lines.length; i++) {
+                // Добавляем цену к названию модели, если текущая строка не пуста и следующая строка содержит цену
+                if (lines[i] && !isNaN(lines[i + 1])) {
+                    formattedText += lines[i] + ' ' + lines[i + 1] + '\n';
+                    i++; // Пропускаем следующую строку, так как она уже добавлена
+                } else if (lines[i]) {
+                    formattedText += lines[i] + '\n';
+                }
+            }
+            document.getElementById('outputText').value = formattedText.trim();
+        }
+    </script>
 </body>
 </html>
