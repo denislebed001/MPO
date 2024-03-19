@@ -7,7 +7,8 @@ TEMPLATE = '''
 <!doctype html>
 <html lang="ru">
 <head>
-  <title>Text Formatter</title>
+  <meta charset="UTF-8">
+  <title>Форматирование текста</title>
   <script>
     // Функция для вставки текста из буфера обмена
     function pasteFromClipboard() {
@@ -25,7 +26,7 @@ TEMPLATE = '''
   <form method="post">
     <textarea id="text" name="text" style="width:400px;height:150px;"></textarea><br>
     <button type="button" onclick="pasteFromClipboard()">Вставить из буфера</button>
-    <button type="submit">Изменить</button>
+    <input type="submit" value="Изменить">
   </form>
   {% if formatted_text %}
     <h2>Отформатированный текст:</h2>
