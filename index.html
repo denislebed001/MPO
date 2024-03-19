@@ -13,35 +13,34 @@
     </style>
 </head>
 <body>
-    <h1>MPOtext</h1>
+    <h1>PostMalone</h1>
     <textarea id="inputText" placeholder="Вставьте текст здесь..."></textarea>
     <button onclick="copyToClipboard()">Копировать</button>
     <button onclick="pasteFromClipboard()">Вставить</button>
     <button onclick="formatText()">Форматировать</button>
     <textarea id="outputText" placeholder="Отформатированный текст будет здесь..."></textarea>
 
-    <script>
-        function copyToClipboard() {
-            const outputText = document.getElementById('outputText');
-            outputText.select();
-            document.execCommand('copy');
-        }
-
-        function pasteFromClipboard() {
-            navigator.clipboard.readText().then(text => {
-                document.getElementById('inputText').value = text;
-            });
-        }
-
-        function formatText() {
-            const inputText = document.getElementById('inputText').value;
-            const lines = inputText.split('\n');
-            let formattedText = '';
-            for (let i = 0; i < lines.length; i += 2) {
-                formattedText += lines[i] + ' ' + lines[i + 1].trim() + '\n';
+  <script>
+    function formatText() {
+        const inputText = document.getElementById('inputText').value;
+        const lines = inputText
+            .replace(/от \d+шт\. -> /g, '')
+            .replace(/ руб\./g, '')
+            .trim()
+            .split('\n');
+        let formattedText = '';
+        for (let i = 0; i < lines.length; i++) {
+            // Проверяем, является ли строка четной (нечетные индексы в массиве),
+            // и добавляем следующую строку (цену) на ту же строку
+            if (i % 2 !== 0) {
+                formattedText += lines[i] + '\n';
+            } else {
+                formattedText += lines[i] + ' ';
             }
-            document.getElementById('outputText').value = formattedText.trim();
         }
-    </script>
+        document.getElementById('outputText').value = formattedText.trim();
+    }
+</script>
+
 </body>
 </html>
