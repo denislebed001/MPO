@@ -13,7 +13,7 @@
     </style>
 </head>
 <body>
-    <h1>OneSecond</h1>
+    <h1>One.Second</h1>
     <textarea id="inputText" placeholder="Вставьте текст здесь..."></textarea>
     <button onclick="copyToClipboard()">Копировать</button>
     <button onclick="pasteFromClipboard()">Вставить</button>
@@ -34,13 +34,14 @@
             if (lines[i] && !isNaN(lines[i + 1])) {
                 formattedText += lines[i] + ' ' + lines[i + 1] + '\n';
                 i++; // Пропускаем следующую строку, так как она уже добавлена
-            } else {
+            } else if (lines[i]) {
                 formattedText += lines[i] + '\n';
             }
         }
         document.getElementById('outputText').value = formattedText.trim();
     }
 </script>
+
 
 </body>
 </html>
