@@ -13,12 +13,13 @@
     </style>
 </head>
 <body>
-    <h1>OneSecond</h1>
+    <h1>Форматирование текста для iPhone</h1>
     <textarea id="inputText" placeholder="Вставьте текст здесь..."></textarea>
     <button onclick="copyToClipboard()">Копировать</button>
     <button onclick="pasteFromClipboard()">Вставить</button>
     <button onclick="formatText()">Форматировать</button>
     <button onclick="replaceYearFormat()">Заменить год</button>
+    <button onclick="reverseYearFormat()">Вернуть год</button>
     <textarea id="outputText" placeholder="Отформатированный текст будет здесь..."></textarea>
 
     <script>
@@ -55,17 +56,23 @@
             document.getElementById('outputText').value = formattedText.trim();
         }
 
-   
-    function replaceYearFormat() {
-        const inputText = document.getElementById('inputText').value;
-        const replacedText = inputText
-            .replace(/\(2023\)/g, '2️⃣3️⃣')
-            .replace(/2023/g, '2️⃣3️⃣')
-            .replace(/\(2022\)/g, '2️⃣2️⃣')
-            .replace(/2022/g, '2️⃣2️⃣');
-        document.getElementById('inputText').value = replacedText;
-    }
-</script>
+        function replaceYearFormat() {
+            const inputText = document.getElementById('inputText').value;
+            const replacedText = inputText
+                .replace(/\(2023\)/g, '2️⃣3️⃣')
+                .replace(/2023/g, '2️⃣3️⃣')
+                .replace(/\(2022\)/g, '2️⃣2️⃣')
+                .replace(/2022/g, '2️⃣2️⃣');
+            document.getElementById('inputText').value = replacedText;
+        }
 
+        function reverseYearFormat() {
+            const inputText = document.getElementById('inputText').value;
+            const reversedText = inputText
+                .replace(/2️⃣3️⃣/g, '2023')
+                .replace(/2️⃣2️⃣/g, '2022');
+            document.getElementById('inputText').value = reversedText;
+        }
+    </script>
 </body>
 </html>
