@@ -13,7 +13,7 @@
     </style>
 </head>
 <body>
-    <h1>Форматирование</h1>
+    <h1>Форматирование текста Абоба</h1>
     <textarea id="inputText" placeholder="Вставьте текст здесь..."></textarea>
     <button onclick="copyToClipboard()">Копировать</button>
     <button onclick="pasteFromClipboard()">Вставить</button>
@@ -36,13 +36,10 @@
         function formatText() {
             const inputText = document.getElementById('inputText').value;
             const formattedText = inputText
-                .split('\n')
-                .map(line => {
-                    const parts = line.match(/(.*?)(от 1шт\. -> )(\d+ \d+)/);
-                    return parts ? parts[1].trim() + ' ' + parts[3].trim() : '';
-                })
-                .filter(line => line)
-                .join('\n');
+                .replace(/от \d+шт\. -> /g, '')
+                .replace(/ руб\./g, '')
+                .replace(/\n+/g, '\n')
+                .trim();
             document.getElementById('outputText').value = formattedText;
         }
     </script>
