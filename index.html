@@ -107,13 +107,16 @@
         }
 
         // Новая функция "cleanAndroidText"
-        function cleanAndroidText() {
-            const inputText = document.getElementById('inputText').value;
-            const cleanedText = inputText
-                .replace(/———/g, '')
-                .replace(/₽[1-9]?/g, '');
-            document.getElementById('outputText').value = cleanedText;
-        }
+     function cleanAndroidText() {
+    const inputText = document.getElementById('inputText').value;
+    const cleanedText = inputText
+        .replace(/———/g, '')
+        .replace(/₽[1-9]?/g, '')
+        .replace(/—/g, '')
+        .replace(/\*/g, '');
+    document.getElementById('outputText').value = cleanedText;
+}
+
     </script>
 </body>
 </html>
