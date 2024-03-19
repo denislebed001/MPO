@@ -1,185 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
+from flask import Flask, request, render_template_string
+
+app = Flask(__name__)
+
+# HTML шаблон с использованием Jinja2
+TEMPLATE = '''
+<!doctype html>
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Привыкни к Аппарату </title>
-    <style>
-        /* привыкни к аппарту */
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 20px;
-            background-color: #1e1e1e;
-            color: #ffffff;
-        }
-
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        label {
-            display: block;
-            font-weight: bold;
-            margin-top: 10px;
-            color: #63c5da; /* Цвет текста для label */
-        }
-
-        textarea {
-            width: 100%;
-            height: 100px;
-            background-color: #282c34; /* Цвет фона textarea */
-            color: #ffffff; /* Цвет текста в textarea */
-            border: 2px solid #63c5da; /* Цвет рамки textarea */
-        }
-
-        input[type="number"] {
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-            background-color: #282c34; /* Цвет фона input */
-            color: #ffffff; /* Цвет текста в input */
-            border: 2px solid #63c5da; /* Цвет рамки input */
-        }
-
-        input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-            background-color: #282c34; /* Цвет фона input для пароля */
-            color: #ffffff; /* Цвет текста в input для пароля */
-            border: 2px solid #63c5da; /* Цвет рамки input для пароля */
-        }
-
-        button {
-            display: block;
-            margin-top: 10px;
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #63c5da; /* Цвет фона кнопки */
-            color: #000000; /* Цвет текста кнопки */
-            border: none;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #51b5c5; /* Цвет фона кнопки при наведении */
-        }
-
-        #result {
-            width: 100%;
-            height: 100px;
-            background-color: #282c34; /* Цвет фона textarea с результатом */
-            color: #ffffff; /* Цвет текста в textarea с результатом */
-            border: 2px solid #63c5da; /* Цвет рамки textarea с результатом */
-            margin-top: 10px;
-        }
-    </style>
+  <title>Text Formatter</title>
+  <script>
+    // Функция для вставки текста из буфера обмена
+    function pasteFromClipboard() {
+      navigator.clipboard.readText().then(
+        clipText => document.getElementById('text').value = clipText);
+    }
+    // Функция для копирования текста в буфер обмена
+    function copyToClipboard() {
+      navigator.clipboard.writeText(document.getElementById('formatted_text').innerText);
+    }
+  </script>
 </head>
 <body>
-    <div class="container">
-        <h1>Привыкни к Аппарату</h1>
-        <label for="password">Введите пароль безопасности:</label>
-        <input type="password" id="password" placeholder="Пароль">
-        <label for="text">Введите текст:</label>
-        <textarea id="text" placeholder="Введите текст с ценами"></textarea>
-        <label for="percentage">Введите процент увеличения:</label>
-        <input type="number" id="percentage" placeholder="Процент увеличения">
-        <button onclick="onIncreasePercentage()">Увеличить цены</button>
-        <button onclick="pasteFromClipboard()">Вставить из буфера</button>
-        <button onclick="copyWithoutSymbol()">Скопировать без '₽'</button>
-        <label for="result">Результат:</label>
-        <textarea id="result" readonly></textarea>
-    </div>
-
-    <script>
-        // JavaScript-функции из вашего кода
-
-        // Добавленная функция для проверки пароля
-        function checkPassword() {
-            const enteredPassword = document.getElementById('password').value;
-            // Здесь замените "ВашПароль" на ваш реальный пароль
-            const realPassword = "060793";
-            return enteredPassword === realPassword;
-        }
-
-        function extractPrices(text) {
-            const mainPattern = /(?<!\d)(\d{1,3}(?:,\d{3})*(?:\.\d{1,2})?)(?:₽🇨🇳)?/g;
-            const fourDigitPattern = /(?<!\d)(\d{4})(?!\d)(?:\s*₽)?/g;
-            const fiveOrMoreDigitPattern = /(?<!\d)(\d{5,})(?!\d)(?:\s*₽)?/g;
-            const allPrices = [];
-
-            let matches = text.match(mainPattern);
-            if (matches) {
-                matches.forEach(match => {
-                    if (!match.includes('(')) {
-                        const formattedPrice = parseFloat(match.replace(/,|\s|₽/g, ''));
-                        allPrices.push(formattedPrice.toFixed(2) + '₽');
-                    }
-                });
-            }
-
-            matches = text.match(fourDigitPattern);
-            if (matches) {
-                allPrices.push(...matches);
-            }
-
-            matches = text.match(fiveOrMoreDigitPattern);
-            if (matches) {
-                allPrices.push(...matches);
-            }
-
-            return allPrices;
-        }
-
-        function increasePrices(prices, percentage) {
-            const increasedPrices = [];
-            for (const price of prices) {
-                const originalPrice = parseFloat(price.replace(/₽|,|\s/g, ''));
-                const increasedPrice = Math.ceil(originalPrice * (1 + percentage / 100) / 100) * 100;
-                increasedPrices.push(increasedPrice.toLocaleString() + '₽');
-            }
-            return increasedPrices;
-        }
-
-        function onIncreasePercentage() {
-            if (!checkPassword()) {
-                alert('Неверный пароль! Введите правильный пароль для выполнения операции.');
-                return;
-            }
-
-            const inputText = document.getElementById('text').value;
-            const percentage = parseFloat(document.getElementById('percentage').value);
-            const resultPrices = extractPrices(inputText);
-            const increasedPrices = increasePrices(resultPrices, percentage);
-            const resultTextArea = document.getElementById('result');
-            let formattedText = inputText;
-            increasedPrices.forEach((price, index) => {
-                formattedText = formattedText.replace(resultPrices[index], price);
-            });
-            resultTextArea.value = formattedText;
-        }
-
-        function pasteFromClipboard() {
-            navigator.clipboard.readText().then((text) => {
-                const textWithoutDots = text.replace(/\./g, ''); // Удаляем все точки из текста
-                document.getElementById('text').value = textWithoutDots;
-            }).catch((error) => {
-                console.error('Ошибка при вставке из буфера: ', error);
-            });
-        }
-
-        function copyWithoutSymbol() {
-            const resultText = document.getElementById('result').value;
-            const textWithoutSymbol = resultText.replace(/₽/g, '');
-            navigator.clipboard.writeText(textWithoutSymbol).then(() => {
-                alert('Текст без символа "₽" скопирован в буфер обмена.');
-            }).catch((error) => {
-                console.error('Ошибка при копировании в буфер обмена: ', error);
-            });
-        }
-    </script>
+  <h1>Форматирование текста</h1>
+  <form method="post">
+    <textarea id="text" name="text" style="width:400px;height:150px;"></textarea><br>
+    <button type="button" onclick="pasteFromClipboard()">Вставить из буфера</button>
+    <button type="submit">Изменить</button>
+  </form>
+  {% if formatted_text %}
+    <h2>Отформатированный текст:</h2>
+    <pre id="formatted_text">{{ formatted_text }}</pre>
+    <button type="button" onclick="copyToClipboard()">Скопировать в буфер</button>
+  {% endif %}
 </body>
 </html>
+'''
 
+@app.route('/', methods=['GET', 'POST'])
+def format_text():
+    formatted_text = ''
+    if request.method == 'POST':
+        text = request.form['text']
+        # Разделяем текст на строки и обрабатываем каждую из них
+        for line in text.split('\n'):
+            if '->' in line:
+                # Убираем лишние слова и символы, оставляем только нужное
+                parts = line.split('->')
+                item = parts[0].strip()
+                price = parts[1].strip().split(' ')[0]
+                formatted_text += f'{item} {price}\n'
+    return render_template_string(TEMPLATE, formatted_text=formatted_text)
 
+if __name__ == '__main__':
+    app.run(debug=True)
