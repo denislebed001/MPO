@@ -39,8 +39,12 @@
                 .split('\n')
                 .map(line => {
                     const parts = line.split('->');
-                    return parts[0].trim() + ' ' + parts[1].trim();
+                    if (parts.length === 2) {
+                        return parts[0].trim() + ' ' + parts[1].trim().split(' ')[0];
+                    }
+                    return '';
                 })
+                .filter(line => line)
                 .join('\n');
             document.getElementById('outputText').value = formattedText;
         }
