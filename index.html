@@ -13,11 +13,12 @@
     </style>
 </head>
 <body>
-    <h1>Форматирование текста для iPhone</h1>
+    <h1>OneSecond</h1>
     <textarea id="inputText" placeholder="Вставьте текст здесь..."></textarea>
     <button onclick="copyToClipboard()">Копировать</button>
     <button onclick="pasteFromClipboard()">Вставить</button>
     <button onclick="formatText()">Форматировать</button>
+    <button onclick="replaceYearFormat()">Заменить год</button>
     <textarea id="outputText" placeholder="Отформатированный текст будет здесь..."></textarea>
 
     <script>
@@ -44,15 +45,24 @@
                 .split('\n');
             let formattedText = '';
             for (let i = 0; i < lines.length; i++) {
-                // Добавляем цену к названию модели, если текущая строка не пуста и следующая строка содержит цену
                 if (lines[i] && !isNaN(lines[i + 1])) {
                     formattedText += lines[i] + ' ' + lines[i + 1] + '\n';
-                    i++; // Пропускаем следующую строку, так как она уже добавлена
+                    i++;
                 } else if (lines[i]) {
                     formattedText += lines[i] + '\n';
                 }
             }
             document.getElementById('outputText').value = formattedText.trim();
+        }
+
+        function replaceYearFormat() {
+            const inputText = document.getElementById('inputText').value;
+            const replacedText = inputText
+                .replace(/\(2023\)/g, '(23.)')
+                .replace(/2023/g, '23.')
+                .replace(/\(2022\)/g, '(22.)')
+                .replace(/2022/g, '22.');
+            document.getElementById('inputText').value = replacedText;
         }
     </script>
 </body>
