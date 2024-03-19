@@ -55,15 +55,17 @@
             document.getElementById('outputText').value = formattedText.trim();
         }
 
-        function replaceYearFormat() {
-            const inputText = document.getElementById('inputText').value;
-            const replacedText = inputText
-                .replace(/\(2023\)/g, '(23.)')
-                .replace(/2023/g, '23.')
-                .replace(/\(2022\)/g, '(22.)')
-                .replace(/2022/g, '22.');
-            document.getElementById('inputText').value = replacedText;
-        }
-    </script>
+   
+    function replaceYearFormat() {
+        const inputText = document.getElementById('inputText').value;
+        const replacedText = inputText
+            .replace(/\(2023\)/g, '2️⃣3️⃣')
+            .replace(/2023/g, '2️⃣3️⃣')
+            .replace(/\(2022\)/g, '2️⃣2️⃣')
+            .replace(/2022/g, '2️⃣2️⃣');
+        document.getElementById('inputText').value = replacedText;
+    }
+</script>
+
 </body>
 </html>
