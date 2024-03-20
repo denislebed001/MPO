@@ -64,10 +64,6 @@
 <body>
     <h1>OneSecond</h1>
     <textarea id="inputText" placeholder="Вставьте текст здесь..."></textarea>
-     <div class="percentage-input-container">
-        <input type="number" id="percentage" placeholder="Введите процент...">
-        <button onclick="onIncreasePercentage()">Увеличить цены</button>
-    </div>
     <button onclick="copyToClipboard()">Копировать</button>
     <button onclick="pasteFromClipboard()">Вставить</button>
     <button onclick="formatText()">Форматировать</button>
@@ -148,19 +144,7 @@ function removeNonFlagEmojis() {
     const cleanedText = inputText.replace(emojiRegex, '');
     document.getElementById('outputText').value = cleanedText;
 }
-         function onIncreasePercentage() {
-            const inputText = document.getElementById('inputText').value;
-            const percentage = parseFloat(document.getElementById('percentage').value);
-            const resultPrices = extractPrices(inputText);
-            const increasedPrices = increasePrices(resultPrices, percentage);
-            const resultTextArea = document.getElementById('outputText');
-            let formattedText = inputText;
-            increasedPrices.forEach((price, index) => {
-                formattedText = formattedText.replace(resultPrices[index], price);
-            });
-            resultTextArea.value = formattedText;
-        }
-
+        
     </script>
 </body>
 </html>
