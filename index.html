@@ -1,3 +1,4 @@
+Раб 
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -39,8 +40,7 @@
         }
         button:active {
             background-color: #0051a8;
-         }
-    
+        }
     </style>
 </head>
 <body>
@@ -51,9 +51,9 @@
     <button onclick="formatText()">Форматировать</button>
     <button onclick="replaceYearFormat()">Заменить год</button>
     <button onclick="reverseYearFormat()">Вернуть год</button>
-    <!-- Новая кнопка "Андройд" -->
     <button onclick="cleanAndroidText()">Андройд</button>
     <button onclick="removeNonFlagEmojis()">Удалить эмодзи</button>
+
     <textarea id="outputText" placeholder="Отформатированный текст будет здесь..."></textarea>
 
     <script>
@@ -118,19 +118,15 @@
         .replace(/\*/g, '');
     document.getElementById('outputText').value = cleanedText;
 }
-        
-function removeNonFlagEmojis() {
+        function removeNonFlagEmojis() {
     const inputText = document.getElementById('inputText').value;
     // Регулярное выражение для поиска всех эмодзи, кроме флагов стран
     const emojiRegex = /(\p{Emoji_Presentation}|\p{Extended_Pictographic})(?<!\p{Regional_Indicator})/gu;
     const cleanedText = inputText.replace(emojiRegex, '');
     document.getElementById('outputText').value = cleanedText;
 }
-        
-    }
-</script>
 
-        
+
     </script>
 </body>
 </html>
