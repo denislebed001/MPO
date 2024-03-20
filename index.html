@@ -85,9 +85,12 @@
         }
 
         function copyToClipboard() {
-            const outputText = document.getElementById('outputText');
-            outputText.select();
-            document.execCommand('copy');
+            const text = document.getElementById('outputText').value;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Текст скопирован в буфер обмена!');
+            }).catch(err => {
+                console.error('Ошибка при копировании текста: ', err);
+            });
         }
 
         function pasteFromClipboard() {
