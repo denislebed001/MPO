@@ -45,17 +45,45 @@
 <body>
     <h1>OneSecond</h1>
     <textarea id="inputText" placeholder="Вставьте текст здесь..."></textarea>
-    <button onclick="copyToClipboard()">Копировать</button>
-    <button onclick="pasteFromClipboard()">Вставить</button>
-    <button onclick="formatText()">Apple прайсы(ав)</button>
-    <button onclick="replaceYearFormat()">Заменить год</button>
-    <button onclick="reverseYearFormat()">Вернуть год</button>
-    <button onclick="cleanAndroidText()">Android прайсы</button>
-    <button onclick="removeNonFlagEmojis()">Удалить эмодзи</button>
+    <button onclick="processText('copyToClipboard')">Копировать</button>
+    <button onclick="processText('pasteFromClipboard')">Вставить</button>
+    <button onclick="processText('formatText')">Apple прайсы(ав)</button>
+    <button onclick="processText('replaceYearFormat')">Заменить год</button>
+    <button onclick="processText('reverseYearFormat')">Вернуть год</button>
+    <button onclick="processText('cleanAndroidText')">Android прайсы</button>
+    <button onclick="processText('removeNonFlagEmojis')">Удалить эмодзи</button>
 
     <textarea id="outputText" placeholder="Отформатированный текст будет здесь..."></textarea>
 
     <script>
+        function processText(operationName) {
+            switch(operationName) {
+                case 'copyToClipboard':
+                    copyToClipboard();
+                    break;
+                case 'pasteFromClipboard':
+                    pasteFromClipboard();
+                    break;
+                case 'formatText':
+                    formatText();
+                    break;
+                case 'replaceYearFormat':
+                    replaceYearFormat();
+                    break;
+                case 'reverseYearFormat':
+                    reverseYearFormat();
+                    break;
+                case 'cleanAndroidText':
+                    cleanAndroidText();
+                    break;
+                case 'removeNonFlagEmojis':
+                    removeNonFlagEmojis();
+                    break;
+                default:
+                    console.error('Неизвестная операция: ', operationName);
+            }
+        }
+
         function copyToClipboard() {
             const outputText = document.getElementById('outputText');
             outputText.select();
