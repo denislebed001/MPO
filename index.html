@@ -74,6 +74,7 @@
             const inputText = document.getElementById('inputText').value;
             const lines = inputText
                 .replace(/от \d+шт\. -> /g, '')
+                .replace(/0шт\. -> /g, '')
                 .replace(/ руб\./g, '')
                 .trim()
                 .split('\n');
