@@ -54,40 +54,46 @@
     <button onclick="processText('removeNonFlagEmojis')">Удалить эмодзи</button>
     <button onclick="processText('removeSpacesBetweenLastNumbers')">Убрать пробелы</button>
 
-
     <textarea id="outputText" placeholder="Отформатированный текст будет здесь..."></textarea>
 
     <script>
+        let lastFormattedText = ''; // Переменная для хранения последнего отформатированного текста
+
         function processText(operationName) {
+            let inputText = document.getElementById('inputText').value;
+            // Если lastFormattedText не пустой, используйте его вместо inputText
+            if (lastFormattedText) {
+                inputText = lastFormattedText;
+            }
             switch(operationName) {
                 case 'copyToClipboard':
-                    copyToClipboard();
+                    lastFormattedText = copyToClipboard(inputText);
                     break;
                 case 'pasteFromClipboard':
                     pasteFromClipboard();
                     break;
                 case 'formatText':
-                    formatText();
+                    lastFormattedText = formatText(inputText);
                     break;
                 case 'replaceYearFormat':
-                    replaceYearFormat();
+                    lastFormattedText = replaceYearFormat(inputText);
                     break;
                 case 'reverseYearFormat':
-                    reverseYearFormat();
+                    lastFormattedText = reverseYearFormat(inputText);
                     break;
                 case 'cleanAndroidText':
-                    cleanAndroidText();
+                    lastFormattedText = cleanAndroidText(inputText);
                     break;
                 case 'removeNonFlagEmojis':
-                    removeNonFlagEmojis();
+                    lastFormattedText = removeNonFlagEmojis(inputText);
                     break;
                 case 'removeSpacesBetweenLastNumbers':
-                    removeSpacesBetweenLastNumbers();
+                    lastFormattedText = removeSpacesBetweenLastNumbers(inputText);
                     break;
                 default:
                     console.error('Неизвестная операция: ', operationName);
-                    
             }
+            document.getElementById('outputText').value = lastFormattedText;
         }
 
         function copyToClipboard() {
