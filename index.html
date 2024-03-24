@@ -52,6 +52,8 @@
     <button onclick="processText('reverseYearFormat')">Вернуть год</button>
     <button onclick="processText('cleanAndroidText')">Android прайсы</button>
     <button onclick="processText('removeNonFlagEmojis')">Удалить эмодзи</button>
+    <button onclick="processText('removeSpacesBetweenLastNumbers')">Убрать пробелы</button>
+
 
     <textarea id="outputText" placeholder="Отформатированный текст будет здесь..."></textarea>
 
@@ -79,8 +81,12 @@
                 case 'removeNonFlagEmojis':
                     removeNonFlagEmojis();
                     break;
+                case 'removeSpacesBetweenLastNumbers':
+                    removeSpacesBetweenLastNumbers();
+                    break;
                 default:
                     console.error('Неизвестная операция: ', operationName);
+                    
             }
         }
 
@@ -156,7 +162,21 @@
     const cleanedText = inputText.replace(emojiRegex, '');
     document.getElementById('outputText').value = cleanedText;
 }
-
+        function removeSpacesBetweenLastNumbers() {
+    const inputText = document.getElementById('inputText').value;
+    const lines = inputText.split('\n');
+    let formattedText = '';
+    for (let line of lines) {
+        const numbers = line.match(/\d+/g);
+        if (numbers && numbers.length >= 2) {
+            const lastNumber = numbers.pop();
+            const secondLastNumber = numbers.pop();
+            line = line.replace(new RegExp(secondLastNumber + '\\s+' + lastNumber), secondLastNumber + lastNumber);
+        }
+        formattedText += line + '\n';
+    }
+    document.getElementById('outputText').value = formattedText.trim();
+}
 
     </script>
 </body>
