@@ -44,7 +44,7 @@
 </head>
 <body>
     <h1>OneSecond</h1>
-    <textarea id="inputText" placeholder="Вставьте текст здесь..."></textarea>
+    <textarea id="textArea" placeholder="Вставьте текст здесь..."></textarea>
     <button onclick="processText('copyToClipboard')">Копировать</button>
     <button onclick="processText('pasteFromClipboard')">Вставить</button>
     <button onclick="processText('formatText')">Apple прайсы(ав)</button>
@@ -54,124 +54,112 @@
     <button onclick="processText('removeNonFlagEmojis')">Удалить эмодзи</button>
     <button onclick="processText('removeSpacesBetweenLastNumbers')">Убрать пробелы</button>
 
-    <textarea id="outputText" placeholder="Отформатированный текст будет здесь..."></textarea>
-
     <script>
-    function processText(operationName) {
-        let inputText = document.getElementById('inputText').value;
-        let outputText;
+        function processText(operationName) {
+            let textArea = document.getElementById('textArea');
+            let text = textArea.value;
 
-        switch(operationName) {
-            case 'copyToClipboard':
-                copyToClipboard();
-                break;
-            case 'pasteFromClipboard':
-                pasteFromClipboard();
-                break;
-            case 'formatText':
-                outputText = formatText(inputText);
-                break;
-            case 'replaceYearFormat':
-                outputText = replaceYearFormat(inputText);
-                break;
-            case 'reverseYearFormat':
-                outputText = reverseYearFormat(inputText);
-                break;
-            case 'cleanAndroidText':
-                outputText = cleanAndroidText(inputText);
-                break;
-            case 'removeNonFlagEmojis':
-                outputText = removeNonFlagEmojis(inputText);
-                break;
-            case 'removeSpacesBetweenLastNumbers':
-                outputText = removeSpacesBetweenLastNumbers(inputText);
-                break;
-            default:
-                console.error('Неизвестная операция: ', operationName);
-        }
-
-        if (outputText !== undefined) {
-            document.getElementById('outputText').value = outputText;
-        }
-    }
-
-    function copyToClipboard() {
-        const text = document.getElementById('outputText').value;
-        navigator.clipboard.writeText(text).then(() => {
-            alert('Текст скопирован в буфер обмена!');
-        }).catch(err => {
-            console.error('Ошибка при копировании текста: ', err);
-        });
-        // Не возвращаем значение, так как эта функция не обновляет текст
-    }
-
-    function pasteFromClipboard() {
-        navigator.clipboard.readText().then(text => {
-            document.getElementById('inputText').value = text;
-        }).catch(err => {
-            console.error('Не удалось вставить текст: ', err);
-        });
-        // Не возвращаем значение, так как эта функция не обновляет текст
-    }
-
-        function formatText() {
-            const inputText = document.getElementById('inputText').value;
-            const lines = inputText
-                .replace(/от \d+шт\. -> /g, '')
-                .replace(/0шт\. -> /g, '')
-                .replace(/ руб\./g, '')
-                .trim()
-                .split('\n');
-            let formattedText = '';
-            for (let i = 0; i < lines.length; i++) {
-                if (lines[i] && !isNaN(lines[i + 1])) {
-                    formattedText += lines[i] + ' ' + lines[i + 1] + '\n';
-                    i++;
-                } else if (lines[i]) {
-                    formattedText += lines[i] + '\n';
-                }
+            switch(operationName) {
+                case 'copyToClipboard':
+                    copyToClipboard(text);
+                    break;
+                case 'pasteFromClipboard':
+                    pasteFromClipboard();
+                    break;
+                case 'formatText':
+                    text = formatText(text);
+                    break;
+                case 'replaceYearFormat':
+                    text = replaceYearFormat(text);
+                    break;
+                case 'reverseYearFormat':
+                    text = reverseYearFormat(text);
+                    break;
+                case 'cleanAndroidText':
+                    text = cleanAndroidText(text);
+                    break;
+                case 'removeNonFlagEmojis':
+                    text = removeNonFlagEmojis(text);
+                    break;
+                case 'removeSpacesBetweenLastNumbers':
+                    text = removeSpacesBetweenLastNumbers(text);
+                    break;
+                default:
+                    console.error('Неизвестная операция: ', operationName);
             }
-            document.getElementById('outputText').value = formattedText.trim();
-        }
 
-        function replaceYearFormat() {
-            const inputText = document.getElementById('inputText').value;
-            const replacedText = inputText
-                .replace(/\(2023\)/g, '2️⃣3️⃣')
-                .replace(/2023/g, '2️⃣3️⃣')
-                .replace(/\(2022\)/g, '2️⃣2️⃣')
-                .replace(/2022/g, '2️⃣2️⃣');
-            document.getElementById('inputText').value = replacedText;
+            textArea.value = text;
         }
+   function copyToClipboard() {
+    const text = document.getElementById('textArea').value;
+    navigator.clipboard.writeText(text).then(() => {
+        alert('Текст скопирован в буфер обмена!');
+    }).catch(err => {
+        console.error('Ошибка при копировании текста: ', err);
+    });
+}
 
-        function reverseYearFormat() {
-            const inputText = document.getElementById('inputText').value;
-            const reversedText = inputText
-                .replace(/2️⃣3️⃣/g, '2023')
-                .replace(/2️⃣2️⃣/g, '2022');
-            document.getElementById('inputText').value = reversedText;
+function pasteFromClipboard() {
+    navigator.clipboard.readText().then(text => {
+        document.getElementById('textArea').value = text;
+    }).catch(err => {
+        console.error('Не удалось вставить текст: ', err);
+    });
+}
+
+function formatText(text) {
+    const lines = text
+        .replace(/от \d+шт\. -> /g, '')
+        .replace(/0шт\. -> /g, '')
+        .replace(/ руб\./g, '')
+        .trim()
+        .split('\n');
+    let formattedText = '';
+    for (let i = 0; i < lines.length; i++) {
+        if (lines[i] && !isNaN(lines[i + 1])) {
+            formattedText += lines[i] + ' ' + lines[i + 1] + '\n';
+            i++;
+        } else if (lines[i]) {
+            formattedText += lines[i] + '\n';
         }
+    }
+    return formattedText.trim();
+}
 
-        // Новая функция "cleanAndroidText"
-     function cleanAndroidText() {
-    const inputText = document.getElementById('inputText').value;
-    const cleanedText = inputText
+function replaceYearFormat(text) {
+    const replacedText = text
+        .replace(/\(2023\)/g, '2️⃣3️⃣')
+        .replace(/2023/g, '2️⃣3️⃣')
+        .replace(/\(2022\)/g, '2️⃣2️⃣')
+        .replace(/2022/g, '2️⃣2️⃣');
+    return replacedText;
+}
+
+function reverseYearFormat(text) {
+    const reversedText = text
+        .replace(/2️⃣3️⃣/g, '2023')
+        .replace(/2️⃣2️⃣/g, '2022');
+    return reversedText;
+}
+
+function cleanAndroidText(text) {
+    const cleanedText = text
         .replace(/———/g, '')
         .replace(/₽[1-9]?/g, '')
         .replace(/—/g, '')
         .replace(/\*/g, '');
-    document.getElementById('outputText').value = cleanedText;
+    return cleanedText;
 }
-        function removeNonFlagEmojis() {
-    const inputText = document.getElementById('inputText').value;
+
+function removeNonFlagEmojis(text) {
     // Регулярное выражение для поиска всех эмодзи, кроме флагов стран
     const emojiRegex = /(\p{Emoji_Presentation}|\p{Extended_Pictographic})(?<!\p{Regional_Indicator})/gu;
-    const cleanedText = inputText.replace(emojiRegex, '');
-    document.getElementById('outputText').value = cleanedText;
+    const cleanedText = text.replace(emojiRegex, '');
+    return cleanedText;
 }
-        function removeSpacesBetweenLastNumbers() {
-    const inputText = document.getElementById('inputText').value;
-    const lines = inputText.split('\n');
+
+function removeSpacesBetweenLastNumbers(text) {
+    const lines = text.split('\n');
     let formattedText = '';
     for (let line of lines) {
         const numbers = line.match(/\d+/g);
@@ -182,7 +170,7 @@
         }
         formattedText += line + '\n';
     }
-    document.getElementById('outputText').value = formattedText.trim();
+    return formattedText.trim();
 }
 
     </script>
