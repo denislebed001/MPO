@@ -57,61 +57,50 @@
     <textarea id="outputText" placeholder="Отформатированный текст будет здесь..."></textarea>
 
     <script>
-        let lastFormattedText = ''; // Переменная для хранения последнего отформатированного текста
+    let lastFormattedText = ''; // Переменная для хранения последнего отформатированного текста
 
-        function processText(operationName) {
-            let inputText = document.getElementById('inputText').value;
-            // Если lastFormattedText не пустой, используйте его вместо inputText
-            if (lastFormattedText) {
-                inputText = lastFormattedText;
-            }
-            switch(operationName) {
-                case 'copyToClipboard':
-                    lastFormattedText = copyToClipboard(inputText);
-                    break;
-                case 'pasteFromClipboard':
-                    pasteFromClipboard();
-                    break;
-                case 'formatText':
-                    lastFormattedText = formatText(inputText);
-                    break;
-                case 'replaceYearFormat':
-                    lastFormattedText = replaceYearFormat(inputText);
-                    break;
-                case 'reverseYearFormat':
-                    lastFormattedText = reverseYearFormat(inputText);
-                    break;
-                case 'cleanAndroidText':
-                    lastFormattedText = cleanAndroidText(inputText);
-                    break;
-                case 'removeNonFlagEmojis':
-                    lastFormattedText = removeNonFlagEmojis(inputText);
-                    break;
-                case 'removeSpacesBetweenLastNumbers':
-                    lastFormattedText = removeSpacesBetweenLastNumbers(inputText);
-                    break;
-                default:
-                    console.error('Неизвестная операция: ', operationName);
-            }
+    function processText(operationName) {
+        let inputText = document.getElementById('inputText').value;
+        // Если lastFormattedText не пустой, используйте его вместо inputText
+        if (lastFormattedText) {
+            inputText = lastFormattedText;
+        }
+        switch(operationName) {
+            case 'copyToClipboard':
+                copyToClipboard(); // Эта функция не должна обновлять lastFormattedText
+                break;
+            case 'pasteFromClipboard':
+                pasteFromClipboard(); // Эта функция не должна обновлять lastFormattedText
+                break;
+            case 'formatText':
+                lastFormattedText = formatText(inputText);
+                break;
+            // ...другие case...
+        }
+        // Обновляем outputText только если lastFormattedText не пустой
+        if (lastFormattedText) {
             document.getElementById('outputText').value = lastFormattedText;
         }
+    }
 
-        function copyToClipboard() {
-            const text = document.getElementById('outputText').value;
-            navigator.clipboard.writeText(text).then(() => {
-                alert('Текст скопирован в буфер обмена!');
-            }).catch(err => {
-                console.error('Ошибка при копировании текста: ', err);
-            });
-        }
+    function copyToClipboard() {
+        const text = document.getElementById('outputText').value;
+        navigator.clipboard.writeText(text).then(() => {
+            alert('Текст скопирован в буфер обмена!');
+        }).catch(err => {
+            console.error('Ошибка при копировании текста: ', err);
+        });
+        // Не возвращаем значение, так как эта функция не обновляет текст
+    }
 
-        function pasteFromClipboard() {
-            navigator.clipboard.readText().then(text => {
-                document.getElementById('inputText').value = text;
-            }).catch(err => {
-                console.error('Не удалось вставить текст: ', err);
-            });
-        }
+    function pasteFromClipboard() {
+        navigator.clipboard.readText().then(text => {
+            document.getElementById('inputText').value = text;
+        }).catch(err => {
+            console.error('Не удалось вставить текст: ', err);
+        });
+        // Не возвращаем значение, так как эта функция не обновляет текст
+    }
 
         function formatText() {
             const inputText = document.getElementById('inputText').value;
