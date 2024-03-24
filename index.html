@@ -57,30 +57,40 @@
     <textarea id="outputText" placeholder="Отформатированный текст будет здесь..."></textarea>
 
     <script>
-    let lastFormattedText = ''; // Переменная для хранения последнего отформатированного текста
-
     function processText(operationName) {
         let inputText = document.getElementById('inputText').value;
-        // Если lastFormattedText не пустой, используйте его вместо inputText
-        if (lastFormattedText) {
-            inputText = lastFormattedText;
-        }
+        let outputText = document.getElementById('outputText').value;
+
         switch(operationName) {
             case 'copyToClipboard':
-                copyToClipboard(); // Эта функция не должна обновлять lastFormattedText
+                copyToClipboard(outputText);
                 break;
             case 'pasteFromClipboard':
-                pasteFromClipboard(); // Эта функция не должна обновлять lastFormattedText
+                pasteFromClipboard();
                 break;
             case 'formatText':
-                lastFormattedText = formatText(inputText);
+                outputText = formatText(inputText);
                 break;
-            // ...другие case...
+            case 'replaceYearFormat':
+                outputText = replaceYearFormat(inputText);
+                break;
+            case 'reverseYearFormat':
+                outputText = reverseYearFormat(inputText);
+                break;
+            case 'cleanAndroidText':
+                outputText = cleanAndroidText(inputText);
+                break;
+            case 'removeNonFlagEmojis':
+                outputText = removeNonFlagEmojis(inputText);
+                break;
+            case 'removeSpacesBetweenLastNumbers':
+                outputText = removeSpacesBetweenLastNumbers(inputText);
+                break;
+            default:
+                console.error('Неизвестная операция: ', operationName);
         }
-        // Обновляем outputText только если lastFormattedText не пустой
-        if (lastFormattedText) {
-            document.getElementById('outputText').value = lastFormattedText;
-        }
+
+        document.getElementById('outputText').value = outputText;
     }
 
     function copyToClipboard() {
