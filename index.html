@@ -59,11 +59,11 @@
     <script>
     function processText(operationName) {
         let inputText = document.getElementById('inputText').value;
-        let outputText = document.getElementById('outputText').value;
+        let outputText;
 
         switch(operationName) {
             case 'copyToClipboard':
-                copyToClipboard(outputText);
+                copyToClipboard();
                 break;
             case 'pasteFromClipboard':
                 pasteFromClipboard();
@@ -90,7 +90,9 @@
                 console.error('Неизвестная операция: ', operationName);
         }
 
-        document.getElementById('outputText').value = outputText;
+        if (outputText !== undefined) {
+            document.getElementById('outputText').value = outputText;
+        }
     }
 
     function copyToClipboard() {
